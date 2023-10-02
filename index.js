@@ -26,7 +26,7 @@
 
     );
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    console.error("Error connecting to the MongoDB:", error);
   }
 
   // Middleware to parse JSON in requests
