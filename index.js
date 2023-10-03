@@ -1,46 +1,37 @@
-  const express = require("express");
-  const mongoose = require("mongoose");
-  const bodyParser = require("body-parser");
-  const doctorRoutes = require("./routes/doctorRoutes");
-  const appointmentRoutes = require("./routes/appointmentRoutes");
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const doctorRoutes = require("./routes/doctorRoutes");
+const appointmentRoutes = require("./routes/appointmentRoutes");
 
-  const app = express();
-  const PORT = process.env.PORT || 3000;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-  // Connect to your MongoDB database
-  // mongoose.connect(
-  //   "mongodb+srv://admin:admin@cluster0.glhpfhm.mongodb.net/?retryWrites=true&w=majority",
-  //   {
-  //     useNewUrlParser: true,
-  //     useUnifiedTopology: true,
-  //   }
-  // );
+app.set("view engine", "ejs");
 
-  try {
-    mongoose.connect(
-      "mongodb+srv://admin:admin@cluster0.glhpfhm.mongodb.net/?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
 
-    );
-  } catch (error) {
-    console.error("Error connecting to the MongoDB:", error);
-  }
 
-  // Middleware to parse JSON in requests
-  app.use(bodyParser.json());
+try {
+  mongoose.connect(
+    "mongodb+srv://admin:admin@cluster0.glhpfhm.mongodb.net/?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
+} catch (error) {
+  console.error("Error connecting to the MongoDB:", error);
+}
 
-  // Use doctorRoutes for doctor-related routes
-  app.use("/api", doctorRoutes);
+// Middleware to parse JSON in requests
+app.use(bodyParser.json());
 
-  // Use appointmentRoutes for appointment-related routes
-  app.use("/api", appointmentRoutes);
+// Use doctorRoutes for doctor-related routes
+app.use(doctorRoutes);
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+// Use appointmentRoutes for appointment-related routes
+app.use(appointmentRoutes);
 
-  
-
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

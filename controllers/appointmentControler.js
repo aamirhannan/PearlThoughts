@@ -1,8 +1,6 @@
 const Appointment = require("../models/appointmentSchema");
 const Doctor = require("../models/doctorSchema");
 
-
-
 exports.getAppointmentsForDoctor = async (req, res) => {
   try {
     const doctorId = req.params.id;
@@ -16,10 +14,10 @@ exports.getAppointmentsForDoctor = async (req, res) => {
     }
     //---------------------------------------------------//
 
-
     const appointments = await Appointment.find({ doctor: doctorId });
     const appointmentsSize = appointments.length;
     res.json({ appointments, Total_Appointment: appointmentsSize });
+
   } catch (error) {
     console.error("Error fetching appointments for doctor:", error);
     res.status(500).json({ error: "Unable to fetch appointments for doctor" });
@@ -27,8 +25,6 @@ exports.getAppointmentsForDoctor = async (req, res) => {
 };
 exports.createAppointment = async (req, res) => {
   try {
-
-    
     const doctorId = req.params.id;
     const { patientName, appointmentTime } = req.body;
 
@@ -55,17 +51,14 @@ exports.createAppointment = async (req, res) => {
         .json({ error: "Doctor has reached the maximum appointments allowed" });
     }
 
-    
     //-------------------------------------------------------/
     //checking the appointment date, if its sunday.
-        const dayOfWeek = new Date(appointmentTime).getDay();
-        if (dayOfWeek === 0) {
-          return res
-            .status(400)
-            .json({ error: "Doctors don't work on Sundays" });
-        }
+    const dayOfWeek = new Date(appointmentTime).getDay();
+    if (dayOfWeek === 0) {
+      return res.status(400).json({ error: "Doctors don't work on Sundays" });
+    }
     //-------------------------------------------------------/
-      //if notheing fails then we are booking the apoointment for that day.
+    //if notheing fails then we are booking the apoointment for that day.
     const newAppointment = new Appointment({
       doctor: doctorId,
       patientName,
